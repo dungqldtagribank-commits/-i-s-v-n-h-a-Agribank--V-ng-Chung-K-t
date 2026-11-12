@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Phiếu chấm điểm – Về đích – Đại sứ Văn hóa Agribank 2026</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f6f3ef;--card:#fff;--ink:#241c1c;--mute:#6f6461;--line:#e2dbd4;--accent:#9e1b32;--accent-ink:#fff;--ok:#2f7a4b;--bad:#c0392b;--tint:#f3e6e8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1515;--card:#251e1e;--ink:#f1eae6;--mute:#a79b97;--line:#3b3130;--accent:#d9546b;--accent-ink:#1a1515;--ok:#6cc08b;--bad:#ff7a6b;--tint:#3a2327;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a1515;--card:#251e1e;--ink:#f1eae6;--mute:#a79b97;--line:#3b3130;--accent:#d9546b;--accent-ink:#1a1515;--ok:#6cc08b;--bad:#ff7a6b;--tint:#3a2327;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Be Vietnam Pro",system-ui,"Segoe UI",sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:20px;line-height:1.3;margin:0 0 2px;color:var(--accent)}
+header p{margin:0 0 12px;color:var(--mute);font-size:13px}
+nav{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px}
+nav button{background:none;border:0;padding:10px 16px;font:inherit;font-weight:600;color:var(--mute);cursor:pointer;border-bottom:3px solid transparent}
+nav button[aria-selected=true]{color:var(--accent);border-color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:4px}
+input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:12px;color:var(--mute);font-weight:600}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr.grp td{background:var(--tint);font-weight:700}
+tr.sub td:first-child{padding-left:24px}
+tr.tot td{font-weight:700}
+tr.final td{background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:700}
+.sc{width:84px;text-align:right;font-weight:600}
+.sc.over{border-color:var(--bad);color:var(--bad)}
+.hint{font-size:13px;color:var(--bad);min-height:18px;margin:6px 0 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button.p,button.s{font:inherit;font-weight:600;border-radius:6px;padding:10px 18px;cursor:pointer;border:1px solid var(--accent)}
+button.p{background:var(--accent);color:var(--accent-ink)}
+button.s{background:none;color:var(--accent)}
+button:disabled{opacity:.5;cursor:wait}
+.msg{font-weight:600;font-size:14px}.msg.ok{color:var(--ok)}.msg.err{color:var(--bad)}
+.banner{background:var(--tint);border:1px solid var(--accent);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:14px}
+.empty{color:var(--mute);text-align:center;padding:20px 0}
+.yes{color:var(--ok);font-weight:700;text-align:center}.no{color:var(--mute);text-align:center}
+.small{font-size:13px;color:var(--mute);margin:0 0 8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Phiếu chấm điểm phần thi Về đích</h1>
+<p>Vòng Chung kết – Hội thi Đại sứ Văn hóa Agribank năm 2026</p>
+</header>
+<div class="banner" id="banner" hidden></div>
+<section id="login" class="card"><label for="who">Bạn là ai?</label><select id="who"></select><div class="row" style="margin-top:12px"><button class="p" id="enter">Vào</button></div></section>
+<div id="userbar" hidden style="margin-bottom:16px"><b id="uname"></b></div>
+
+<section id="v1" hidden>
+<nav id="jtabs" role="tablist"><button role="tab" id="m1" aria-selected="true">Chấm điểm</button><button role="tab" id="m2" aria-selected="false">Sửa điểm đã gửi</button></nav>
+<div class="card" id="editbox" hidden><label>Chọn đội cần chỉnh sửa</label><div class="row" id="chips"></div></div>
+<div class="card" id="c1"><div class="meta">
+<div id="teamf"><label for="team">Đội thi</label><select id="team"></select></div>
+<div><label for="exam">Số đề thi</label><select id="exam"></select></div>
+</div></div>
+<div class="card tbl" id="c2">
+<table>
+<thead><tr><th>STT</th><th>Nội dung</th><th class="n">Số điểm tối đa</th><th class="n">Điểm BGK</th></tr></thead>
+<tbody id="body"></tbody>
+</table>
+<p class="hint" id="hint"></p>
+</div>
+<div class="card" id="c3"><label for="note">Nhận xét (nếu có)</label><textarea id="note" rows="3"></textarea></div>
+<div class="row" id="c4">
+<button class="p" id="save">Gửi kết quả</button>
+<span class="msg" id="msg" role="status"></span>
+</div>
+</section>
+
+<section id="v2" hidden>
+<div class="row" style="margin-bottom:16px">
+<button class="p" id="xl">Xuất file Excel</button>
+<button class="s" id="reload">Tải lại dữ liệu</button>
+<span class="msg" id="msg2" role="status"></span>
+</div>
+<div class="card tbl"><p class="small">Điểm trung bình của các giám khảo đã nộp phiếu. Số màu đỏ ở cột Số GK là đội chưa đủ phiếu.</p><div id="rank"></div></div>
+<div class="card"><label for="sel">Chi tiết điểm từng giám khảo theo hạng mục</label><select id="sel"></select></div>
+<div class="card tbl" id="det"></div>
+<div class="card tbl"><p class="small">Tiến độ nộp phiếu (✓ là đã nộp).</p><div id="prog"></div></div>
+</section>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+const JUDGES=['Nguyễn Thị Thu Hà','Nguyễn Khắc Trung','Đồng Đức Giang','Nguyễn Việt Hải','Lê Thị Bắc','Nguyễn Văn Bách','Thái Thị Thanh Thủy','Nguyễn Thị Nga'];
+const TEAMS=['Nghệ An','Nam Thanh Hóa','Bình Dương','Hải Dương','Lâm Đồng II','Long An','Lào Cai','Trung Yên','Hưng Yên II','Vĩnh Phúc II','Bình Định','Tiền Giang','An Giang','Hà Tây','Nam Sài Gòn','Gia Lâm','Hà Nội II','Tây Sài Gòn','Thủ Đức','Tân Bình'];
+const NJ=JUDGES.length;
+const STAFF=['Vũ Thị Kim Dung','Vũ Ngọc Châu','Nguyễn Thị Thanh Thúy Hằng','Phạm Thị Hạnh'];
+const ITEMS=[{k:'1.1',t:'Câu 1',m:25},{k:'1.2',t:'Câu 2',m:25},{k:'2.1',t:'Văn hóa giao tiếp, ứng xử',m:10},{k:'2.2',t:'Tinh thần trách nhiệm và phụng sự khách hàng',m:10},{k:'3',t:'Trả lời câu hỏi phụ và khả năng ứng biến',m:10},{k:'4.1',t:'Lưu loát, rành mạch',m:10},{k:'4.2',t:'Phong thái tự tin, chuyên nghiệp; phối hợp và diễn xuất giữa các thành viên tự nhiên, không lặp ý',m:10}];
+const EXM={'07':[30,20],'09':[30,20],'10':[30,20],'08':[45,5]};
+const EX=e=>EXM[String(e).padStart(2,'0')]||[25,25];
+const M=(k,e)=>k==='1.1'?EX(e)[0]:k==='1.2'?EX(e)[1]:ITEMS.find(x=>x.k===k).m;
+const $=id=>document.getElementById(id);
+const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?0:n};
+const r2=n=>Math.round(n*100)/100, fmt=n=>String(r2(n)).replace('.',',');
+const K=(j,t)=>'j'+j+'t'+t;
+let MODE='new',MS={},ME=-1,db=null,uid=null,docs=[],mine=new Set(),LS={},tok=0,curTeam=0;
+try{LS=JSON.parse(localStorage.getItem('agbp')||'{}')}catch(e){}
+const lsSave=()=>{try{localStorage.setItem('agbp',JSON.stringify(LS))}catch(e){}};
+
+function compute(s,pen,E){
+ const v=k=>Math.min(Math.max(num(s[k]),0),M(k,E));
+ const g1=v('1.1')+v('1.2'),g2=v('2.1')+v('2.2'),g3=v('3'),g4=v('4.1')+v('4.2');
+ const I=g1+g2+g3,III=I+g4,p=Math.max(num(pen),0);
+ return{g1,g2,g3,g4,I,III,p,V:Math.max(III-p,0)};
+}
+function row(x,E,tot){const m=M(x.k,E);
+ return `<tr class="${tot?'tot':'sub'}"><td>${x.k}</td><td>${x.t}</td><td class="n">${m}</td><td class="n"><input class="sc" data-k="${x.k}" data-m="${m}" inputmode="decimal" placeholder="0" aria-label="${x.t}"></td></tr>`}
+function build(){
+ const E=$('exam').value;
+ const P=(s,t,m,id,c)=>`<tr class="${c}"><td>${s}</td><td>${t}</td><td class="n">${m}</td><td class="n" id="${id}">0</td></tr>`;
+ const I=k=>row(ITEMS.find(x=>x.k===k),E);
+ let h=P('I','TỔNG ĐIỂM NỘI DUNG',80,'tI','grp');
+ h+=P('1','Xử lý tình huống',50,'g1','tot')+I('1.1')+I('1.2');
+ h+=P('2','Văn hóa ứng xử và giao tiếp với khách hàng',20,'g2','tot')+I('2.1')+I('2.2');
+ h+=row(ITEMS.find(x=>x.k==='3'),E,true);
+ h+=P('II','TỔNG ĐIỂM THUYẾT TRÌNH',20,'tII','grp');
+ h+=P('4','Kỹ năng thuyết trình và thể hiện',20,'g4','tot')+I('4.1')+I('4.2');
+ h+=P('III','TỔNG ĐIỂM I + II',100,'tIII','grp');
+ h+=`<tr><td>IV</td><td><label for="pen" style="margin:0;color:inherit;font-size:15px">ĐIỂM TRỪ DO QUÁ THỜI GIAN</label></td><td class="n"></td><td class="n"><input class="sc" id="pen" inputmode="decimal" placeholder="0"></td></tr>`;
+ h+=P('V','TỔNG ĐIỂM CUỐI CÙNG',100,'tV','final');
+ $('body').innerHTML=h;
+ document.querySelectorAll('.sc').forEach(e=>e.addEventListener('input',calc));
+}
+const vals=()=>{const s={};document.querySelectorAll('.sc[data-k]').forEach(e=>s[e.dataset.k]=e.value);return s};
+function calc(){
+ const bad=[];
+ document.querySelectorAll('.sc[data-k]').forEach(e=>{const o=num(e.value)>+e.dataset.m||num(e.value)<0;e.classList.toggle('over',o);if(o)bad.push(e.dataset.k)});
+ $('hint').textContent=bad.length?`Điểm mục ${bad.join(', ')} vượt khung cho phép; hệ thống chỉ tính đến mức tối đa.`:'';
+ const r=compute(vals(),$('pen').value,$('exam').value);
+ ['1','2','4'].forEach(g=>$('g'+g).textContent=fmt(r['g'+g]));
+ $('tI').textContent=fmt(r.I);$('tII').textContent=fmt(r.g4);$('tIII').textContent=fmt(r.III);$('tV').textContent=fmt(r.V);
+}
+function say(id,t,c){const e=$(id);e.textContent=t;e.className='msg '+(c||'')}
+function teamOpts(){
+ const v=$('team').value;
+ const list=TEAMS.map((t,i)=>i).filter(i=>MODE==='edit'||!mine.has(i));
+ $('team').innerHTML='<option value="">'+(list.length?'Chọn đội thi':'Đã gửi kết quả tất cả các đội')+'</option>'+list.map(i=>`<option value="${i}">${TEAMS[i]}</option>`).join('');
+ $('team').value=v;
+ renderChips();
+}
+function renderChips(){
+ const ids=[...mine].sort((a,b)=>a-b),cur=$('team').value;
+ $('chips').innerHTML=ids.length?ids.map(i=>{const on=MODE==='edit'&&cur==i;return`<button class="s chip" data-i="${i}" aria-pressed="${on}" style="${on?'background:var(--accent);color:var(--accent-ink)':''}">${TEAMS[i]}${MS[i]&&MS[i].total!=null?' · '+fmt(MS[i].total):''}</button>`}).join(''):'<span class="small" style="margin:0">Chưa có đội nào đã gửi kết quả.</span>';
+ $('m2').textContent='Sửa điểm đã gửi ('+ids.length+')';
+ document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{$('team').value=b.dataset.i;loadSheet()});
+}
+function showForm(){
+ const sel=$('team').value!=='',v=MODE==='new'||sel;
+ ['c1','c2','c3','c4'].forEach(id=>$(id).hidden=!v);
+}
+function setMode(m){
+ MODE=m;$('m1').setAttribute('aria-selected',m==='new');$('m2').setAttribute('aria-selected',m==='edit');
+ $('teamf').hidden=m==='edit';$('editbox').hidden=m!=='edit';$('team').value='';teamOpts();loadSheet();
+}
+async function mySheets(){
+ if(db){const s=await db.doc('scores/j'+ME).get();return s.exists?(s.data().sheets||{}):{}}
+ const o={};Object.values(LS).forEach(x=>{if(x.ji===ME)o[x.ti]=x});return o;
+}
+async function readMine(){mine=new Set();MS={};try{MS=await mySheets();Object.keys(MS).forEach(t=>mine.add(+t))}catch(e){}teamOpts()}
+async function loadSheet(){
+ const j=String(ME),t=$('team').value,my=++tok;
+ showForm();renderChips();build();$('note').value='';calc();say('msg','');$('save').textContent='Gửi kết quả';
+ if(j===''||t==='')return;
+ let d=null;try{d=(await mySheets())[t]||null}catch(e){}
+ if(my!==tok||!d)return;
+ $('exam').value=d.exam;build();
+ document.querySelectorAll('.sc[data-k]').forEach(e=>e.value=d.scores[e.dataset.k]||'');
+ $('pen').value=d.pen||'';$('note').value=d.note||'';calc();
+ say('msg','Đây là kết quả đã gửi lúc '+new Date(d.ts).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})+'. Chỉnh sửa điểm rồi bấm Gửi kết quả.','ok');
+}
+async function save(){
+ const j=String(ME),t=$('team').value;
+ if(ME<0||t===''){say('msg','Chọn đội thi trước khi gửi.','err');return}
+ if(Object.values(vals()).every(v=>v==='')){say('msg','Chưa nhập điểm nào.','err');return}
+ const E=$('exam').value,r=compute(vals(),$('pen').value,E);
+ const d={ji:+j,ti:+t,judge:JUDGES[j],team:TEAMS[t],exam:E,scores:vals(),pen:$('pen').value,note:$('note').value,total:r.V,ts:Date.now()};
+ $('save').disabled=true;
+ try{
+  if(db){const sh=await mySheets();sh[t]=d;await db.doc('scores/j'+ME).set({ji:ME,sheets:sh,ts:Date.now()})}
+  else{LS[K(j,t)]=d;lsSave()}
+  const was=mine.has(+t);mine.add(+t);MS[t]=d;teamOpts();
+  const tt='(tổng '+fmt(r.V)+')';
+  if(was){say('msg','Đã gửi kết quả chỉnh sửa đội '+TEAMS[t]+' '+tt+'.','ok')}
+  else{
+   let nx=TEAMS.findIndex((_,i)=>!mine.has(i)&&i>+t);if(nx<0)nx=TEAMS.findIndex((_,i)=>!mine.has(i));
+   $('team').value=nx>=0?String(nx):'';await loadSheet();
+   say('msg','Đã gửi kết quả đội '+TEAMS[t]+' '+tt+'.','ok');
+  }
+ }catch(e){say('msg','Chưa gửi được kết quả. Kiểm tra kết nối và thử lại.','err')}
+ $('save').disabled=false;
+}
+
+/* ===== Tổng hợp ===== */
+function agg(ti){
+ const rs=docs.filter(d=>d.ti===ti);
+ const cnt={};rs.forEach(r=>cnt[r.exam]=(cnt[r.exam]||0)+1);
+ const exam=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0]||'01';
+ const L=rs.map(r=>({r,c:compute(r.scores,r.pen,exam)}));
+ const A=f=>L.length?L.reduce((s,x)=>s+f(x.c),0)/L.length:0;
+ return{ti,exam,L,n:L.length,mixed:Object.keys(cnt).length>1,I:A(c=>c.I),g1:A(c=>c.g1),g2:A(c=>c.g2),g3:A(c=>c.g3),g4:A(c=>c.g4),III:A(c=>c.III),p:A(c=>c.p),V:A(c=>c.V)};
+}
+function rowsOf(ex){
+ const cl=(r,k)=>Math.min(Math.max(num(r.scores[k]),0),M(k,ex));
+ return[[['I','Tổng điểm nội dung'],80,(r,c)=>c.I,2],[['1','Xử lý tình huống'],50,(r,c)=>c.g1,1],[['1.1','Câu 1'],M('1.1',ex),r=>cl(r,'1.1')],[['1.2','Câu 2'],M('1.2',ex),r=>cl(r,'1.2')],
+ [['2','Văn hóa ứng xử và giao tiếp với khách hàng'],20,(r,c)=>c.g2,1],[['2.1','Văn hóa giao tiếp, ứng xử'],10,r=>cl(r,'2.1')],[['2.2','Tinh thần trách nhiệm và phụng sự khách hàng'],10,r=>cl(r,'2.2')],
+ [['3','Trả lời câu hỏi phụ và khả năng ứng biến'],10,(r,c)=>c.g3,1],[['II','Tổng điểm thuyết trình'],20,(r,c)=>c.g4,2],[['4','Kỹ năng thuyết trình và thể hiện'],20,(r,c)=>c.g4,1],
+ [['4.1','Lưu loát, rành mạch'],10,r=>cl(r,'4.1')],[['4.2','Phong thái tự tin, chuyên nghiệp; phối hợp, diễn xuất tự nhiên'],10,r=>cl(r,'4.2')],
+ [['III','Tổng điểm I + II'],100,(r,c)=>c.III,2],[['IV','Điểm trừ do quá thời gian'],'',(r,c)=>c.p],[['V','Tổng điểm cuối cùng'],100,(r,c)=>c.V,3]];
+}
+function detailMatrix(a){
+ const by=ji=>a.L.find(x=>x.r.ji===ji);
+ return rowsOf(a.exam).map(([n,m,f,s])=>{
+  const v=JUDGES.map((_,ji)=>{const x=by(ji);return x?r2(f(x.r,x.c)):''});
+  const got=v.filter(y=>y!=='');
+  return{n,m,s,v,avg:got.length?r2(got.reduce((p,q)=>p+q,0)/got.length):''};
+ });
+}
+function ranking(){
+ const T=TEAMS.map((_,i)=>agg(i));
+ const sorted=[...T].sort((a,b)=>(b.n>0)-(a.n>0)||b.V-a.V);
+ sorted.forEach((x,i)=>x.rank=x.n?i+1:'');
+ return sorted;
+}
+const HD=['Đội thi','Số GK','I. Nội dung /80','1. Xử lý tình huống /50','2. Văn hóa ứng xử /20','3. Câu hỏi phụ /10','II. Thuyết trình /20','III. Tổng I + II /100','IV. Điểm trừ','V. Điểm cuối /100','Hạng'];
+const rankVals=x=>[x.n,x.I,x.g1,x.g2,x.g3,x.g4,x.III,x.p,x.V].map((y,i)=>x.n?r2(y):(i?'':y)).concat([x.rank]);
+function render(){
+ const T=ranking();
+ $('rank').innerHTML='<table><thead><tr>'+HD.map((h,i)=>`<th class="${i?'n':''}">${h}</th>`).join('')+'</tr></thead><tbody>'+
+  T.map(x=>{const v=rankVals(x);return`<tr><td>${TEAMS[x.ti]}${x.mixed?' <span style="color:var(--bad)" title="Các giám khảo chọn số đề khác nhau">(lệch số đề)</span>':''}</td>`+v.map((y,j)=>{
+   const s=j===1?`${y}/${NJ}`:y===''?'–':fmt(y);
+   return`<td class="n">${j===1&&y<NJ?`<span style="color:var(--bad)">${s}</span>`:j===8?'<b>'+s+'</b>':s}</td>`}).join('')+'</tr>'}).join('')+'</tbody></table>';
+ $('sel').innerHTML=TEAMS.map((t,i)=>`<option value="${i}">${t}</option>`).join('');$('sel').value=curTeam;
+ const a=agg(curTeam),mx=detailMatrix(a);
+ $('det').innerHTML=`<p class="small">Đội ${TEAMS[curTeam]} – đề số ${a.exam} – đã có ${a.n}/${NJ} phiếu</p><table><thead><tr><th>STT</th><th>Nội dung</th><th class="n">Tối đa</th>`+JUDGES.map(j=>`<th class="n" style="white-space:normal;min-width:72px">${j}</th>`).join('')+'<th class="n">Trung bình</th></tr></thead><tbody>'+
+  mx.map(x=>`<tr class="${['','tot','grp','final'][x.s||0]}"><td>${x.n[0]}</td><td>${x.n[1]}</td><td class="n">${x.m}</td>`+x.v.map(y=>`<td class="n">${y===''?'–':fmt(y)}</td>`).join('')+`<td class="n"><b>${x.avg===''?'–':fmt(x.avg)}</b></td></tr>`).join('')+'</tbody></table>';
+ $('prog').innerHTML='<table><thead><tr><th>Đội thi</th>'+JUDGES.map(j=>`<th class="n" style="white-space:normal;min-width:72px">${j}</th>`).join('')+'</tr></thead><tbody>'+
+  TEAMS.map((t,i)=>`<tr><td>${t}</td>`+JUDGES.map((_,ji)=>`<td class="${docs.some(d=>d.ti===i&&d.ji===ji)?'yes':'no'}">${docs.some(d=>d.ti===i&&d.ji===ji)?'✓':'–'}</td>`).join('')+'</tr>').join('')+'</tbody></table>';
+}
+async function loadAll(){
+ say('msg2','Đang tải...');
+ try{docs=[];(db?(await db.collection('scores').get()).docs.map(d=>d.data()):[{sheets:LS}]).forEach(x=>{if(x&&x.sheets)docs.push(...Object.values(x.sheets))});
+  const best={};docs.forEach(d=>{const k=K(d.ji,d.ti);if(!best[k]||d.ts>best[k].ts)best[k]=d});docs=Object.values(best);say('msg2','');render()}
+ catch(e){say('msg2','Không tải được dữ liệu tổng hợp. Kiểm tra kết nối rồi bấm Tải lại dữ liệu.','err')}
+}
+async function exportXlsx(){
+ try{
+  const dl=window.claude&&await claude.use('downloads');
+  if(!dl){say('msg2','Trình duyệt này không hỗ trợ tải file. Hãy mở trang trong claude.ai.','err');return}
+  const T=ranking(),wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([HD].concat(T.map(x=>[TEAMS[x.ti]].concat(rankVals(x))))),'Tổng hợp');
+  const D=[];
+  T.filter(x=>x.n).forEach(x=>{
+   D.push([`Đội ${TEAMS[x.ti]} – đề số ${x.exam} – ${x.n}/${NJ} phiếu`]);
+   D.push(['STT','Nội dung','Tối đa'].concat(JUDGES,['Trung bình']));
+   detailMatrix(x).forEach(m=>D.push([m.n[0],m.n[1],m.m].concat(m.v,[m.avg])));
+   D.push([]);
+  });
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(D),'Chi tiết');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Đội thi'].concat(JUDGES)].concat(TEAMS.map((t,i)=>[t].concat(JUDGES.map((_,ji)=>docs.some(d=>d.ti===i&&d.ji===ji)?'✓':''))))),'Tiến độ');
+  const nt=docs.filter(d=>d.note).map(d=>[d.judge,d.team,d.exam,d.note]);
+  if(nt.length)XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Giám khảo','Đội thi','Đề','Nhận xét']].concat(nt)),'Nhận xét');
+  await dl.save({filename:'Tong_hop_diem_Ve_dich_2026.xlsx',data:XLSX.write(wb,{bookType:'xlsx',type:'array'})});
+  say('msg2','Đã xuất file Excel.','ok');
+ }catch(e){say('msg2',e&&e.code==='declined'?'Bạn đã hủy lưu file.':'Chưa xuất được file Excel.','err')}
+}
+
+/* ===== Khởi động ===== */
+function enter(w){
+ const judge=w[0]==='j',i=+w.slice(1);
+ $('login').hidden=true;$('userbar').hidden=false;
+ $('uname').textContent=(judge?'Giám khảo: ':'Cán bộ tổng hợp: ')+(judge?JUDGES[i]:STAFF[i]);
+ ME=judge?i:-1;$('v1').hidden=!judge;$('v2').hidden=judge;
+ clearInterval(window.__t);
+ if(judge){readMine().then(()=>setMode('new'))}
+ else{loadAll();window.__t=setInterval(loadAll,10000)}
+}
+$('who').innerHTML='<option value="">Chọn tên của bạn</option><optgroup label="Giám khảo">'+JUDGES.map((j,i)=>`<option value="j${i}">${j}</option>`).join('')+'</optgroup><optgroup label="Cán bộ tổng hợp">'+STAFF.map((j,i)=>`<option value="s${i}">${j}</option>`).join('')+'</optgroup>';
+$('exam').innerHTML=Array.from({length:10},(_,i)=>`<option>${String(i+1).padStart(2,'0')}</option>`).join('');
+teamOpts();build();calc();
+$('enter').onclick=()=>{const w=$('who').value;if(w)enter(w)};
+$('m1').onclick=()=>setMode('new');$('m2').onclick=()=>setMode('edit');
+$('team').onchange=loadSheet;
+$('exam').onchange=()=>{const s=vals(),p=$('pen').value;build();document.querySelectorAll('.sc[data-k]').forEach(e=>e.value=s[e.dataset.k]||'');$('pen').value=p;calc()};
+$('save').onclick=save;
+$('reload').onclick=loadAll;$('sel').onchange=e=>{curTeam=+e.target.value;render()};$('xl').onclick=exportXlsx;
+(async()=>{
+ try{if(window.claude)db=await claude.use('db')}catch(e){}
+ if(!db){$('banner').hidden=false;$('banner').textContent='Trang đang chạy ở chế độ một máy: phiếu chỉ lưu trên thiết bị này. Muốn nhiều máy cùng dùng, mở trang bằng tài khoản Claude được cấp quyền chỉnh sửa trang.'}
+})();
+</script>
+</body>
+</html>
